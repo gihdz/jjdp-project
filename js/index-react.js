@@ -72,16 +72,17 @@ var Map = React.createClass({
     getInitialState() {
         return {
             map: null,
-            infoWindow: null,
-            service: null,
             loc: null,
+            infoWindow: null,
             markers: []
         };
     },
+    componentWillReceiveProps(nextProps){
+        if(nextProps.type) this.getNearbyPlaces(nextProps.type);
+
+    },
     render(){
-        if(this.props.type){
-            this.getNearbyPlaces();
-        }
+        
         return(<div id="map"></div> )
     },
     componentDidMount (){       
@@ -91,11 +92,11 @@ var Map = React.createClass({
           center: defaultLoc
         });
         let infoWindow = new google.maps.InfoWindow({map: map});
-        let service = new google.maps.places.PlacesService(map);
+        infoWindow.close();
+        // let service = new google.maps.places.PlacesService(map);
         this.setState({
             map: map,
-            infoWindow: infoWindow,
-            service: service
+            infoWindow: infoWindow
         }, this.setMyLocation);
         
         },
@@ -124,34 +125,47 @@ var Map = React.createClass({
         }
 
         },
-        getNearbyPlaces(){
-           let {map, loc, service} = this.state;
-           if(!map || !loc || !service) return;
+        getNearbyPlaces(type){
+           let {map, loc} = this.state;
+           if(!map || !loc || !type) return;
         let myLatLng = new google.maps.LatLng(loc.lat,loc.lng);
-        let type = this.props.type;
         let request = {
     location: myLatLng,
     radius: '500',
     types: [type]
   };
+  let service = new google.maps.places.PlacesService(map);
   service.nearbySearch(request, this.callbackNearbySearch);
 
         },
         callbackNearbySearch(results, status){
+    this.deleteCurrentMarkers();
+            
             if (status == google.maps.places.PlacesServiceStatus.OK) {
-    // deleteCurrentMarkers();
-    console.log(results);
+    let markers = this.state.markers;
     for (var i = 0; i < results.length; i++) {
       var place = results[i];
-      this.createMarker(results[i]);
+      markers.push(this.createMarker(results[i]));
+    }  
+        this.setState({markers:markers});
+  } else
+  {
+    var n = noty({
+    text: 'No places found!',
+    type: "warning",
+    timeout: 3000,
+    animation: {
+        open: {height: 'toggle'},
+        close: {height: 'toggle'},
+        easing: 'swing',
+        speed: 500 // opening & closing animation speed
     }
-    
-  }
+});
 
+  }
         },
               createMarker(place){
-        // console.log(place);
-        let {map, markers} = this.state;
+        let {map} = this.state;
         var lat = place.geometry.location.lat();
         var lng = place.geometry.location.lng();
         var pos = {
@@ -161,19 +175,42 @@ var Map = React.createClass({
         var marker = new google.maps.Marker({
           position: pos,
           map: map,
-          title: place.name
+          title: place.name,
+          pid: place.place_id
         });
-        marker.addListener("click", function(){
-        //   selectedMarker = marker;
+        
+        marker.addListener("click", () => {
           var request = {placeId: place.place_id};
-          console.log(place);
-          service.getDetails(request, callbackGetDetails);
-          
+          let service = new google.maps.places.PlacesService(map);          
+          service.getDetails(request, this.callbackGetDetails);        
 
         });
-        markers.push(marker);
-        this.setState({markers:markers});
-      }
+        return marker;
+      },
+      callbackGetDetails (place, status){
+          let {map, markers, infoWindow} = this.state;
+          if(!map || !infoWindow) return;
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+      let marker = markers.find(mark => mark.pid == place.place_id);
+          infoWindow.setContent(this.getPlaceInfoHtml(place));
+          infoWindow.open(map, marker);
+            }
+         },
+          getPlaceInfoHtml(place){
+           var snip =
+           "<strong>" + place.name + "</strong></br>" +
+           place.formatted_address + "</br>" +
+           "<a href ='"+place.url+"' target='_blank'>View on Google Maps</a>";
+           return snip;
+         },
+         deleteCurrentMarkers(){
+             var {map, markers} = this.state;
+             for(var i = 0; i< markers.length; i++){
+                     markers[i].setMap(null);
+                      }
+  markers = [];
+  this.setState({markers: markers});
+}
 
 });
 ReactDOM.render(
