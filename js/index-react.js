@@ -63,7 +63,10 @@ this.updateSelectOptions(options)
 class Map extends React.Component{
     constructor(props) {
         super(props);
-        this.state = {map: null};
+        this.state = {
+            map: null,
+            infoWindow: null
+        };
     }
     render(){
         return(<div id="map"></div> )
@@ -74,8 +77,34 @@ class Map extends React.Component{
           zoom: 4,
           center: defaultLoc
         });
-        this.setState({map: map});
-    }
+        this.setState({map: map}, this.setMyLocation);
+        }
+        setMyLocation(){
+            if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(position => {
+            var myLoc = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+            var map = this.state.map;
+            if(map){
+            map.setCenter(myLoc);
+            map.setZoom(15);
+            }
+            // getNearbyPlaces();
+            var infoWindow = new google.maps.InfoWindow({map: map});
+            this.setState({
+                map: map,
+                infoWindow: infoWindow,
+            });
+
+            
+
+          }, function() {
+          });
+        }
+
+        }
 
 };
 ReactDOM.render(
