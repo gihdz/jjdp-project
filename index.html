@@ -12,24 +12,28 @@
     </style>
   </head>
   <body>
-    <h3>Search Places by Type</h3>
-    <select id='select_types'>
-
-    </select>
-    <br/>
-    <br/>
-    <div id="map"></div>
+    <div id="root"></div>
+    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script type="text/javascript" src="js/noty/packaged/jquery.noty.packaged.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js"></script>
-<script type="text/javascript" src="js/index.js"></script>
-    <script>
-    
+ <script 
+    src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.18.1/babel.min.js"></script>
+    <script 
+    src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.1/react.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.1/react-dom.min.js"></script>
+<script src="https://unpkg.com/classnames/index.js"></script>
+<script src="https://unpkg.com/react-input-autosize/dist/react-input-autosize.js"></script>
+<script src="https://unpkg.com/react-select/dist/react-select.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/react-select/dist/react-select.css">
+<!--<script type="text/javascript" src="js/index.js"></script>-->
+  <script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCs3DFzngMkLn-9Io_WPh5IcdEFL5jRTlk&libraries=places">
     </script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCs3DFzngMkLn-9Io_WPh5IcdEFL5jRTlk&libraries=places&callback=initMap">
-    </script>
     
+<script type="text/babel" src="js/index-react.js"></script>
+  
 
   </body>
 </html>
