@@ -68,22 +68,22 @@ this.updateSelectOptions(options)
         )
     }
 });
-class Map extends React.Component{
-    constructor(props) {
-        super(props);
-        this.state = {
+var Map = React.createClass({
+    getInitialState() {
+        return {
             map: null,
             infoWindow: null,
             service: null,
-            loc: null
+            loc: null,
+            markers: []
         };
-    }
+    },
     render(){
         if(this.props.type){
             this.getNearbyPlaces();
         }
         return(<div id="map"></div> )
-    }
+    },
     componentDidMount (){       
         let defaultLoc = {lat: -25.363, lng: 131.044};        
         let map = new google.maps.Map(document.getElementById('map'), {
@@ -98,7 +98,7 @@ class Map extends React.Component{
             service: service
         }, this.setMyLocation);
         
-        }
+        },
         setMyLocation(){
             let map = this.state.map;
             if(!map) return;
@@ -123,7 +123,7 @@ class Map extends React.Component{
           });
         }
 
-        }
+        },
         getNearbyPlaces(){
            let {map, loc, service} = this.state;
            if(!map || !loc || !service) return;
@@ -136,21 +136,46 @@ class Map extends React.Component{
   };
   service.nearbySearch(request, this.callbackNearbySearch);
 
-        }
+        },
         callbackNearbySearch(results, status){
             if (status == google.maps.places.PlacesServiceStatus.OK) {
     // deleteCurrentMarkers();
     console.log(results);
-    // for (var i = 0; i < results.length; i++) {
-    //   var place = results[i];
-    //   this.createMarker(results[i]);
-    // }
+    for (var i = 0; i < results.length; i++) {
+      var place = results[i];
+      this.createMarker(results[i]);
+    }
     
   }
 
-        }
+        },
+              createMarker(place){
+        // console.log(place);
+        let {map, markers} = this.state;
+        var lat = place.geometry.location.lat();
+        var lng = place.geometry.location.lng();
+        var pos = {
+              lat: lat,
+              lng: lng
+            };
+        var marker = new google.maps.Marker({
+          position: pos,
+          map: map,
+          title: place.name
+        });
+        marker.addListener("click", function(){
+        //   selectedMarker = marker;
+          var request = {placeId: place.place_id};
+          console.log(place);
+          service.getDetails(request, callbackGetDetails);
+          
 
-};
+        });
+        markers.push(marker);
+        this.setState({markers:markers});
+      }
+
+});
 ReactDOM.render(
   <Main />,
   document.getElementById('root')
