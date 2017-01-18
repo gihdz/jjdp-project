@@ -75,7 +75,6 @@ var type = document.getElementById("select_types").value;
     types: [type]
   };
 
-  service = new google.maps.places.PlacesService(map);
   service.nearbySearch(request, callbackNearbySearch);
 }
       function callbackNearbySearch(results, status) {
