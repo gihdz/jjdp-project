@@ -9,7 +9,8 @@ var Map = React.createClass({
     },
     componentWillReceiveProps(nextProps){       
         if(nextProps.type && this.props.type != nextProps.type) this.getNearbyPlaces(nextProps.type);
-
+        if(nextProps.placeId && this.props.placeId != nextProps.placeId)
+        this.getPlaceDetailById(nextProps.placeId);
     },
     render(){
         
@@ -114,12 +115,19 @@ var Map = React.createClass({
         });
         
         marker.addListener("click", () => {
-          var request = {placeId: place.place_id};
-          let service = new google.maps.places.PlacesService(map);          
-          service.getDetails(request, this.callbackGetDetails);        
+          this.getPlaceDetailById(place.place_id);
+          // var request = {placeId: place.place_id};
+          // let service = new google.maps.places.PlacesService(map);          
+          // service.getDetails(request, this.callbackGetDetails);        
 
         });
         return marker;
+      },
+      getPlaceDetailById(id){
+        let {map} = this.state;
+        let request = {placeId: id};        
+        let service = new google.maps.places.PlacesService(map);          
+          service.getDetails(request, this.callbackGetDetails);         
       },
       callbackGetDetails (place, status){
           let {map, markers, infoWindow} = this.state;

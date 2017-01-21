@@ -10,7 +10,8 @@ var Main = React.createClass({
     firebase.initializeApp(config);    
         return {
             selectedType: null,
-            markerList: []
+            markerList: [],
+            placeId: null
         }
     },
     handleSelChange(type){
@@ -20,16 +21,19 @@ var Main = React.createClass({
         this.setState({markerList: markers});
 
     },
-    
+    handleMarkerListClick(li){
+        let id = li.target.getAttribute("data-id");
+        this.setState({placeId: id});
+    },
     render(){
         return(<div>
        <h3>Search Places by Type</h3>
     <Sel handleSelChange={this.handleSelChange}/>
     <br/>
     <br/>
-    <Map type={this.state.selectedType} setMarkerList={this.setMarketList} />
+    <Map type={this.state.selectedType} setMarkerList={this.setMarketList} placeId= {this.state.placeId} />
     <hr />
-        <MarkerList markers={this.state.markerList} />
+    <MarkerList markers={this.state.markerList} handleMarkerListClick={this.handleMarkerListClick} />
 
         </div>
         );

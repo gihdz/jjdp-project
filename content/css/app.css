@@ -3,3 +3,11 @@
     margin-left: auto;
     margin-right: auto;*/
 }
+.marker{
+    cursor: pointer;
+}
+.Select-control{
+    max-width: 600px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
