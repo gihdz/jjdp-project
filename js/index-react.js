@@ -9,19 +9,28 @@ var Main = React.createClass({
   };
     firebase.initializeApp(config);    
         return {
-            selectedType: null
+            selectedType: null,
+            markerList: []
         }
     },
     handleSelChange(type){
         this.setState({selectedType: type});
     },
+    setMarketList(markers){
+        this.setState({markerList: markers});
+
+    },
+    
     render(){
         return(<div>
        <h3>Search Places by Type</h3>
     <Sel handleSelChange={this.handleSelChange}/>
     <br/>
     <br/>
-    <Map type={this.state.selectedType} />
+    <Map type={this.state.selectedType} setMarkerList={this.setMarketList} />
+    <hr />
+        <MarkerList markers={this.state.markerList} />
+
         </div>
         );
     }

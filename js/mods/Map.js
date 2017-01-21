@@ -7,8 +7,8 @@ var Map = React.createClass({
             markers: []
         };
     },
-    componentWillReceiveProps(nextProps){
-        if(nextProps.type) this.getNearbyPlaces(nextProps.type);
+    componentWillReceiveProps(nextProps){       
+        if(nextProps.type && this.props.type != nextProps.type) this.getNearbyPlaces(nextProps.type);
 
     },
     render(){
@@ -70,14 +70,15 @@ var Map = React.createClass({
         },
         callbackNearbySearch(results, status){
     this.deleteCurrentMarkers();
-            
+    let places = [];
+    let markers = [];            
             if (status == google.maps.places.PlacesServiceStatus.OK) {
-    let markers = this.state.markers;
     for (var i = 0; i < results.length; i++) {
       var place = results[i];
       markers.push(this.createMarker(results[i]));
+      places.push(results[i]);
     }  
-        this.setState({markers:markers});
+       
   } else
   {
     var n = noty({
@@ -93,6 +94,9 @@ var Map = React.createClass({
 });
 
   }
+   this.setState({markers:markers}, 
+        this.props.setMarkerList(places)
+        );
         },
               createMarker(place){
         let {map} = this.state;
