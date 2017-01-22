@@ -31,9 +31,10 @@ var Main = React.createClass({
     <Sel handleSelChange={this.handleSelChange}/>
     <br/>
     <br/>
+    <div id="container">
     <Map type={this.state.selectedType} setMarkerList={this.setMarketList} placeId= {this.state.placeId} />
-    <hr />
     <MarkerList markers={this.state.markerList} handleMarkerListClick={this.handleMarkerListClick} />
+    </div>
 
         </div>
         );

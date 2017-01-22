@@ -24,12 +24,10 @@ var Map = React.createClass({
         });
         let infoWindow = new google.maps.InfoWindow({map: map});
         infoWindow.close();
-        // let service = new google.maps.places.PlacesService(map);
         this.setState({
             map: map,
             infoWindow: infoWindow
-        }, this.setMyLocation);
-        
+        }, this.setMyLocation);        
         },
         setMyLocation(){
             let map = this.state.map;
@@ -116,10 +114,6 @@ var Map = React.createClass({
         
         marker.addListener("click", () => {
           this.getPlaceDetailById(place.place_id);
-          // var request = {placeId: place.place_id};
-          // let service = new google.maps.places.PlacesService(map);          
-          // service.getDetails(request, this.callbackGetDetails);        
-
         });
         return marker;
       },

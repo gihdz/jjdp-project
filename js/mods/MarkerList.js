@@ -9,7 +9,7 @@ var MarkerList = React.createClass({
         </li>    )
 
         });
-        return <div>
+        return <div id="marker-list">
         <ul className="list-group">
         {markersList}
         </ul>        
