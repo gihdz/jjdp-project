@@ -14,12 +14,14 @@
 .marker{
     cursor: pointer;
 }
+.input-search-marker{
+    width: 100%;
+    margin-bottom: 10px;
+}
 .Select-control{
     max-width: 600px !important;
     margin-left: auto !important;
     margin-right: auto !important;
-}
-@media screen and (min-width: 801px){
 }
 @media screen and (max-width: 800px){
     #map{
