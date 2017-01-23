@@ -3,7 +3,8 @@ var Sel = React.createClass({
     getInitialState(){
         return {
             options: [],
-            selected: null
+            selected: null,
+            radius: 500
         };
     },
     componentDidMount(){
@@ -17,27 +18,38 @@ for(var key in placeTypes){
     options.push(option);
   }
 }
-this.updateSelectOptions(options)
+let defVal = options[0].value;
+this.setState({options: options, selected: defVal}, this.updateTypeOnMap);
 });
-
     },
-    updateSelectOptions(options){
-        let defVal = options[0].value;
-        this.setState({options: options, selected: defVal});
-        this.props.handleSelChange(defVal);
+    updateTypeOnMap(){
+        let {selected, radius} = this.state;        
+        this.props.handleSelChange(selected, radius);
     },
     changeSel(val){
-        this.setState({selected: val.value});
-        this.props.handleSelChange(val.value);
+        this.setState({selected: val.value}, this.updateTypeOnMap);
+    },
+    handleRadiusChange(val){
+        let radius = (val.target.value ? val.target.value <= 50000 : val.target.value) || 500;
+        this.setState({radius});
+    },
+    handleBtnClick(){
+        this.updateTypeOnMap();
     },
     render(){
         return (
-            
-            <Select
+            <div id="places-form" >
+            <Select className="p-form"
     name="select_types"
     value= {this.state.selected}
     options={this.state.options}
     onChange={this.changeSel}/>
+    <input className="input-radius p-form" placeholder="radius in meters, default: 500m, max: 50,000m" onChange={this.handleRadiusChange}/>
+    
+        <button className="btn btn-default submit-places-form p-form" type="button" onClick={this.handleBtnClick}>
+        Search
+        </button>
+    </div>
         )
     }
 });

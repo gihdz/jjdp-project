@@ -5,11 +5,10 @@ var MarkerList = React.createClass({
             markerList: [],
             inputValue: ""
         }
-
     },
     componentWillReceiveProps(nextProps){
         let {markers} = nextProps;
-        this.setState({markers: markers, markerList: markers}, this.filterList);
+        this.setState({markers, markerList: markers}, this.filterList);
     },
     handleInputChange(e){
         let inputValue = e.target.value;        
@@ -19,7 +18,6 @@ var MarkerList = React.createClass({
         let {inputValue} = this.state;
         let markerList = this.state.markers.filter(marker => marker.name.toLowerCase().includes(inputValue.toLowerCase()));
         this.setState({markerList});
-
     },
     render(){    
         let markers = this.state.markerList;

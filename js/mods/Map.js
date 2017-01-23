@@ -2,19 +2,29 @@ var Map = React.createClass({
     getInitialState() {
         return {
             map: null,
-            loc: null,
             infoWindow: null,
-            markers: []
+            markers: [],
+            places: []
         };
     },
-    componentWillReceiveProps(nextProps){       
-        if(nextProps.type && this.props.type != nextProps.type) this.getNearbyPlaces(nextProps.type);
-        if(nextProps.placeId && this.props.placeId != nextProps.placeId)
-        this.getPlaceDetailById(nextProps.placeId);
+    componentWillReceiveProps(nextProps){
+      console.log(nextProps.type);       
+        this.getNearbyPlaces(nextProps.type, nextProps.radius);
     },
-    render(){
-        
-        return(<div id="map"></div> )
+    
+    handleMarkerListClick(li){
+        let id = li.target.getAttribute("data-id");
+        this.getPlaceDetailById(id);
+    },
+    render(){        
+        return(
+          <div id="container">
+          <div id="map-container">
+          <div id="map"></div> 
+          </div>
+           <MarkerList markers={this.state.places} handleMarkerListClick={this.handleMarkerListClick} />
+        </div>
+        )
     },
     componentDidMount (){       
         let defaultLoc = {lat: -25.363, lng: 131.044};        
@@ -42,11 +52,9 @@ var Map = React.createClass({
 
             map.setCenter(myLoc);
             map.setZoom(15);
-            // getNearbyPlaces();
             
             this.setState({
-                map: map,
-                loc: myLoc
+                map: map
             });            
 
           }, function() {
@@ -54,13 +62,12 @@ var Map = React.createClass({
         }
 
         },
-        getNearbyPlaces(type){
-           let {map, loc} = this.state;
-           if(!map || !loc || !type) return;
-        let myLatLng = new google.maps.LatLng(loc.lat,loc.lng);
+        getNearbyPlaces(type, radius){
+           let {map} = this.state;
+           if(!map || !type) return;
         let request = {
-    location: myLatLng,
-    radius: '500',
+    location: map.getCenter(),
+    radius: radius,
     types: [type]
   };
   let service = new google.maps.places.PlacesService(map);
@@ -93,9 +100,7 @@ var Map = React.createClass({
 });
 
   }
-   this.setState({markers:markers}, 
-        this.props.setMarkerList(places)
-        );
+   this.setState({markers, places});       
         },
               createMarker(place){
         let {map} = this.state;
@@ -145,7 +150,7 @@ var Map = React.createClass({
                      markers[i].setMap(null);
                       }
   markers = [];
-  this.setState({markers: markers});
+  this.setState({markers});
 }
 
 });

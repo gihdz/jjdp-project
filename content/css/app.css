@@ -2,10 +2,30 @@
     display: flex;
     flex-wrap: wrap;
 }
+#places-form{
+        max-width: 600px !important;
+
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-bottom: 10px;
+}
+#places-form .p-form{
+    margin-bottom: 10px;
+}
+.input-radius{
+    width: 100%;
+}
+.submit-places-form{
+    width: 100%
+}
 #map {
         height: 400px;
-        width: 50%;
+        width: 100%;
        }
+#map-container {
+        width: 50%;
+       }       
+       
 #marker-list{
     width: 50%;
     padding: 0px 50px;
@@ -18,13 +38,10 @@
     width: 100%;
     margin-bottom: 10px;
 }
-.Select-control{
-    max-width: 600px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-}
+
+
 @media screen and (max-width: 800px){
-    #map{
+    #map-container{
         width: 100%;
         margin-left: auto;
         margin-right: auto;
