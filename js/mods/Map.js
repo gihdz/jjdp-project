@@ -4,7 +4,8 @@ var Map = React.createClass({
             map: null,
             infoWindow: null,
             markers: [],
-            places: []
+            places: [],
+            localized: false
         };
     },
     componentWillReceiveProps(nextProps){
@@ -54,17 +55,20 @@ var Map = React.createClass({
             map.setZoom(15);
             
             this.setState({
-                map: map
-            });            
+                map, localized: true
+            });
+            this.getNearbyPlaces("accounting", 500);            
 
           }, function() {
           });
         }
+        else alert("HTML5 geolocation not supported by browser! :(");
+        
 
         },
         getNearbyPlaces(type, radius){
-           let {map} = this.state;
-           if(!map || !type) return;
+           let {map, localized} = this.state;
+           if(!map || !type || !localized) return;
         let request = {
     location: map.getCenter(),
     radius: radius,
