@@ -13,8 +13,7 @@ var Map = React.createClass({
         this.getNearbyPlaces(nextProps.type, nextProps.radius);
     },
     
-    handleMarkerListClick(li){
-        let id = li.target.getAttribute("data-id");
+    handleMarkerListClick(id){
         this.getPlaceDetailById(id);
     },
     render(){        

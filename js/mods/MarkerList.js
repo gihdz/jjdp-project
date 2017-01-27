@@ -23,7 +23,7 @@ var MarkerList = React.createClass({
         let markers = this.state.markerList;
         let markerList = markers.map(marker => {
             return (
-        <li data-id={marker.place_id} className="list-group-item marker" onClick={this.props.handleMarkerListClick}>
+        <li className="list-group-item marker" onClick={this.props.handleMarkerListClick.bind(this, marker.place_id)}>
            {marker.name}  
         </li>)
 
