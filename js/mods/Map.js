@@ -55,11 +55,9 @@ var Map = React.createClass({
             
             this.setState({
                 map, localized: true
-            });
-            this.getNearbyPlaces("accounting", 500);            
+            });            
 
-          }, function() {
-          });
+          }, () => alert("Unable to retrieve your location."));
         }
         else alert("HTML5 geolocation not supported by browser! :(");
         
